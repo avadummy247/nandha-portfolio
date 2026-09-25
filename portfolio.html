@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nandha Krishna — Product Designer & Creative Director</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary-accent: #ff4500;
+      --primary-accent-hover: #e03e00;
+      --bg-dark: #070707;
+      --text-white: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.65);
+      --card-bg: rgba(18, 18, 20, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --glass-blur: blur(20px);
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Fixed Fullscreen Upscaled Canvas */
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: 0;
+      pointer-events: none;
+      filter: contrast(1.06) brightness(1.02) saturate(1.05);
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+
+    /* Gradient overlay for perfect contrast & readability */
+    .bg-gradient-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 30%, rgba(0, 0, 0, 0.25) 0%, rgba(7, 7, 7, 0.75) 100%);
+    }
+
+    /* Scroll Track Container */
+    .scroll-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      min-height: 600vh;
+      pointer-events: none;
+    }
+
+    .interactive-element {
+      pointer-events: auto;
+    }
+
+    /* Floating Fixed Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.75rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(7, 7, 7, 0.85) 0%, rgba(7, 7, 7, 0) 100%);
+      backdrop-filter: blur(8px);
+      pointer-events: auto;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-white);
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.25s ease;
+    }
+
+    nav a:hover {
+      color: var(--text-white);
+    }
+
+    .btn-orange {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background-color: var(--primary-accent);
+      color: #ffffff;
+      padding: 0.6rem 1.25rem 0.6rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(255, 69, 0, 0.35);
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-orange:hover {
+      background-color: var(--primary-accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(255, 69, 0, 0.5);
+    }
+
+    .btn-orange .arrow-circle {
+      width: 28px;
+      height: 28px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-accent);
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-orange:hover .arrow-circle {
+      transform: translateX(2px);
+    }
+
+    /* Content Wrapper */
+    .content-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 7rem;
+      padding-bottom: 4rem;
+    }
+
+    .hero-main-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3rem;
+      align-items: flex-end;
+      margin-bottom: 5rem;
+    }
+
+    .hero-left-content .kicker {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .hero-left-content h1 {
+      font-size: 5.25rem;
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-right-content {
+      padding-bottom: 0.75rem;
+    }
+
+    .hero-right-content h2 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-right-content p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Services Grid Bar (#01 to #05) */
+    .services-bar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .service-item .num {
+      color: var(--primary-accent);
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .service-item .title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-white);
+    }
+
+    /* Trusted Brands Bar */
+    .brands-section {
+      margin: 8rem 0 12rem 0;
+    }
+
+    .brands-card {
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      padding: 1.75rem 3.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      pointer-events: auto;
+    }
+
+    .brands-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      max-width: 180px;
+      line-height: 1.35;
+    }
+
+    .brands-logos {
+      display: flex;
+      align-items: center;
+      gap: 3.5rem;
+    }
+
+    .brand-logo-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-white);
+      letter-spacing: -0.01em;
+    }
+
+    .brand-logo-item svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* Behind the Designs Section */
+    .behind-designs-section {
+      padding-bottom: 20rem;
+    }
+
+    .designs-header-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3rem;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+
+    .designs-kicker {
+      color: var(--primary-accent);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .designs-title {
+      font-size: 3.75rem;
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .designs-right-desc {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .designs-right-desc p {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .designs-cta-sub {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .designs-cta-sub span {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* Portfolio Cards Grid */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      pointer-events: auto;
+    }
+
+    .portfolio-card {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      aspect-ratio: 3/4;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+      cursor: pointer;
+    }
+
+    .portfolio-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255, 69, 0, 0.5);
+    }
+
+    .portfolio-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .portfolio-card:hover img {
+      transform: scale(1.05);
+    }
+
+    /* Footer */
+    footer {
+      padding: 4rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: auto;
+      margin-top: 5rem;
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-white);
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 1024px) {
+      header {
+        padding: 1.25rem 2rem;
+      }
+      .hero-left-content h1 {
+        font-size: 4rem;
+      }
+      .designs-title {
+        font-size: 2.75rem;
+      }
+      .hero-main-grid, .designs-header-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .brands-card {
+        flex-direction: column;
+        gap: 1.5rem;
+        border-radius: 24px;
+        padding: 2rem;
+      }
+      .services-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-left-content h1 {
+        font-size: 3rem;
+      }
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+      .portfolio-grid .project-card:last-child {
+        grid-column: 1;
+      }
+      .brands-logos {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        justify-content: center;
+      }
+      .services-bar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Custom Sleek Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #070707;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #252525;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-accent);
+    }
+
+    /* Project Cards Styling */
+    .project-card {
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 340px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+      position: relative;
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255, 69, 0, 0.5);
+      box-shadow: 0 30px 60px rgba(255, 69, 0, 0.15);
+    }
+
+    .project-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag-orange {
+      background: rgba(255, 69, 0, 0.15);
+      color: var(--primary-accent);
+      border: 1px solid rgba(255, 69, 0, 0.3);
+    }
+
+    .tag-purple {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .tag-blue {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .project-status {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4ade80;
+    }
+
+    .status-soon {
+      color: #facc15;
+    }
+
+    .project-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .project-desc {
+      font-size: 1.02rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .project-card-footer {
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .project-link {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      transition: color 0.2s;
+    }
+
+    .project-card:hover .project-link {
+      color: var(--primary-accent);
+    }
+
+    /* Contact Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(18px);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      background: rgba(20, 20, 24, 0.95);
+      backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 28px;
+      padding: 3rem 2.5rem;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85);
+      position: relative;
+      transform: translateY(20px) scale(0.95);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .modal-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .contact-buttons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .contact-item-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 1.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      text-decoration: none;
+      color: #fff;
+      transition: all 0.25s ease;
+    }
+
+    .contact-item-btn:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: var(--primary-accent);
+      transform: translateY(-2px);
+    }
+
+    .contact-item-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-align: left;
+    }
+
+    .contact-icon-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .whatsapp-box {
+      background: rgba(37, 211, 102, 0.15);
+      color: #25D366;
+    }
+
+    .email-box {
+      background: rgba(255, 69, 0, 0.15);
+      color: var(--primary-accent);
+    }
+
+    .contact-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .contact-val {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .action-badge {
+      font-size: 0.85rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .contact-item-btn:hover .action-badge {
+      background: var(--primary-accent);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- High-Quality Upscaled Canvas -->
+  <canvas id="canvas"></canvas>
+  <div class="bg-gradient-overlay"></div>
+
+  <!-- Header -->
+  <header class="interactive-element">
+    <a href="#home" class="logo">Nandha Krishna</a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact" class="btn-orange">
+        Get in touch
+        <div class="arrow-circle">→</div>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Scroll Container Track -->
+  <div class="scroll-container">
+    <div class="content-wrapper">
+
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="hero-main-grid">
+          <div class="hero-left-content">
+            <span class="kicker">Hey, I'm</span>
+            <h1>Nandha<br>Krishna</h1>
+          </div>
+          <div class="hero-right-content">
+            <h2>Welcome To My Portfolio</h2>
+            <p style="font-size: 1.25rem; font-weight: 600; color: var(--primary-accent); margin-top: 0.25rem;">Queen's & King's</p>
+          </div>
+        </div>
+
+        <!-- Who Am I Section Title & Roles Bar -->
+        <div style="margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.12);">
+          <span style="color: var(--primary-accent); font-size: 1.15rem; font-weight: 700; display: block; margin-bottom: 1.5rem; letter-spacing: 0.02em;">Who Am I</span>
+          <div class="services-bar" style="border-top: none; padding-top: 0;">
+            <div class="service-item">
+              <span class="num">#01</span>
+              <div class="title">Story writer</div>
+            </div>
+            <div class="service-item">
+              <span class="num">#02</span>
+              <div class="title">Web Developer</div>
+            </div>
+            <div class="service-item">
+              <span class="num">#03</span>
+              <div class="title">Model</div>
+            </div>
+            <div class="service-item">
+              <span class="num">#04</span>
+              <div class="title">Mod Developer</div>
+            </div>
+            <div class="service-item">
+              <span class="num">#05</span>
+              <div class="title">PhotoGrapher</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Education Section -->
+      <section style="margin: 4rem 0 2rem 0; pointer-events: auto;">
+        <div style="background: var(--card-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--card-border); border-radius: 24px; padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);">
+          <div>
+            <span style="color: var(--primary-accent); font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.3rem;">Education</span>
+            <h3 style="font-size: 1.85rem; font-weight: 800; color: #ffffff; margin-bottom: 0.4rem;">Student Of LOYOLA</h3>
+            <p style="font-size: 1.05rem; color: var(--text-muted); font-weight: 500;">Pursuing A Degree In <span style="color: #ffffff; font-weight: 700;">[BMM MultiMedia & Animation]</span></p>
+          </div>
+          <div style="width: 52px; height: 52px; border-radius: 16px; background: rgba(255, 69, 0, 0.15); display: flex; align-items: center; justify-content: center; color: var(--primary-accent); flex-shrink: 0;">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trusted Brands Bar -->
+      <section class="brands-section">
+        <div class="brands-card">
+          <div class="brands-title">
+            Founder Of BenzFollowers
+          </div>
+          <div class="brands-logos">
+            <div class="brand-logo-item" style="color: var(--primary-accent); font-size: 1.15rem; font-weight: 700;">
+              <svg viewBox="0 0 24 24" style="width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.2;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Trusted And Paid Insta Id Boosted
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Behind the Designs Section -->
+      <section class="behind-designs-section" id="projects" style="pointer-events: auto;">
+        <div class="designs-header-grid">
+          <div>
+            <h2 class="designs-title">MY TOP PROJECTS</h2>
+          </div>
+          <div class="designs-right-desc">
+            <div class="designs-cta-sub">
+              <span>Let's Build Something Meaningful Together</span>
+              <a href="#contact" class="btn-orange interactive-element">
+                Get in touch
+                <div class="arrow-circle">→</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 1: BenzFollowers full width -->
+        <div class="portfolio-grid" style="grid-template-columns: 1fr; margin-bottom: 2rem;">
+          <!-- Project 1: BenZFollowers -->
+          <div class="project-card">
+            <div class="project-card-header">
+              <span class="project-tag tag-orange">Insta ID Booster</span>
+              <span class="project-status">● Active</span>
+            </div>
+            <div class="project-card-body">
+              <h3 class="project-title">BenZFollowers</h3>
+              <p class="project-desc">Trusted & Paid Instagram ID Booster. Delivering authentic growth, high-engagement reach, and account boosting for creators and brands.</p>
+            </div>
+            <div class="project-card-footer">
+              <span class="project-link">Founder & Creator →</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: BenzWota + GnG side by side -->
+        <div class="portfolio-grid" style="grid-template-columns: 1fr 1fr;">
+
+          <!-- Project 2: BenzWota -->
+          <div class="project-card">
+            <div class="project-card-header">
+              <span class="project-tag tag-orange">In Development</span>
+              <span class="project-status status-soon">⚡ Coming Soon</span>
+            </div>
+            <div class="project-card-body">
+              <h3 class="project-title">Project BenzWota</h3>
+              <p class="project-desc">Currently working on Project BenzWota. Next-generation platform designed for high-performance digital experiences.</p>
+            </div>
+            <div class="project-card-footer">
+              <span class="project-link" style="color: var(--primary-accent);">Coming Soon...</span>
+            </div>
+          </div>
+
+          <!-- Project 3: GnG Short Film -->
+          <div class="project-card" style="
+            border-color: rgba(255, 69, 0, 0.35);
+            background: linear-gradient(135deg, rgba(18, 18, 20, 0.8) 0%, rgba(30, 10, 5, 0.75) 100%);
+            position: relative;
+            overflow: hidden;
+          ">
+            <!-- Shimmer sweep -->
+            <div style="
+              position: absolute;
+              inset: 0;
+              background: linear-gradient(105deg, transparent 40%, rgba(255, 69, 0, 0.07) 50%, transparent 60%);
+              animation: gng-shimmer 3s ease-in-out infinite;
+              pointer-events: none;
+            "></div>
+
+            <div class="project-card-header">
+              <span class="project-tag tag-orange">🎬 Short Film</span>
+              <span class="project-status status-soon" style="
+                background: rgba(255, 69, 0, 0.18);
+                color: #ff6a35;
+                border: 1px solid rgba(255, 69, 0, 0.4);
+                border-radius: 999px;
+                padding: 0.25rem 0.85rem;
+                font-size: 0.75rem;
+                font-weight: 700;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                animation: gng-pulse-badge 2s ease-in-out infinite;
+              ">📡 Stay Tuned</span>
+            </div>
+
+            <div class="project-card-body">
+              <!-- Film strip decorative bar -->
+              <div style="
+                display: flex;
+                gap: 5px;
+                margin-bottom: 1.2rem;
+              ">
+                <div style="width: 28px; height: 4px; border-radius: 2px; background: var(--primary-accent); opacity: 0.9;"></div>
+                <div style="width: 14px; height: 4px; border-radius: 2px; background: rgba(255,69,0,0.4);"></div>
+                <div style="width: 8px; height: 4px; border-radius: 2px; background: rgba(255,69,0,0.2);"></div>
+              </div>
+
+              <h3 class="project-title" style="
+                font-size: 2rem;
+                background: linear-gradient(135deg, #ffffff 0%, #ff6a35 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                letter-spacing: -0.02em;
+              ">GnG</h3>
+
+              <p style="
+                font-size: 0.7rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.12em;
+                color: var(--primary-accent);
+                margin-top: 0.2rem;
+                margin-bottom: 0.9rem;
+                opacity: 0.85;
+              ">An Original Short Film</p>
+
+              <p class="project-desc">A cinematic short film currently in the works. Concept, story, and direction by Nandha Krishna. Brace yourself — something real is coming.</p>
+            </div>
+
+            <div class="project-card-footer" style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: var(--primary-accent);
+              ">
+                <span style="
+                  width: 8px; height: 8px; border-radius: 50%;
+                  background: var(--primary-accent);
+                  animation: gng-pulse-dot 1.5s ease-in-out infinite;
+                  display: inline-block;
+                "></span>
+                Coming Soon...
+              </span>
+              <span style="
+                font-size: 0.75rem;
+                color: rgba(255,255,255,0.35);
+                font-weight: 600;
+                letter-spacing: 0.04em;
+              ">Director & Writer</span>
+            </div>
+          </div>
+        </div>
+
+        <style>
+          @keyframes gng-shimmer {
+            0% { transform: translateX(-100%); }
+            60%, 100% { transform: translateX(200%); }
+          }
+          @keyframes gng-pulse-badge {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(255, 69, 0, 0); }
+          }
+          @keyframes gng-pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.6; }
+          }
+        </style>
+
+        <!-- Bottom Tagline & Footer -->
+        <div style="text-align: center; margin-top: 5rem; margin-bottom: 2rem;">
+          <span style="color: var(--primary-accent); font-size: 1.35rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">Through My Lens</span>
+        </div>
+
+        <footer id="contact">
+          <p>© 2026 Nandha Krishna. All rights reserved.</p>
+          <div class="footer-links">
+            <a href="#">LinkedIn</a>
+            <a href="https://www.instagram.com/lordbenzx/" target="_blank">Instagram</a>
+            <a href="https://discord.com/users/notnotchabenzo" target="_blank">Discord</a>
+          </div>
+        </footer>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Contact Modal -->
+  <div class="modal-overlay" id="contactModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeModalBtn">✕</button>
+      <h3 class="modal-title">Get in Touch</h3>
+      <p class="modal-subtitle">Connect with Nandha Krishna directly via WhatsApp or Email</p>
+
+      <div class="contact-buttons-list">
+        <!-- WhatsApp -->
+        <a href="https://wa.me/919566633163" target="_blank" class="contact-item-btn">
+          <div class="contact-item-left">
+            <div class="contact-icon-box whatsapp-box">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.964 9.964 0 0 0 1.333 4.993L2 22l5.233-1.371a9.957 9.957 0 0 0 4.779 1.218h.004c5.505 0 9.988-4.478 9.989-9.985A9.984 9.984 0 0 0 12.012 2zm0 18.312h-.003a8.313 8.313 0 0 1-4.237-1.166l-.304-.18-3.149.825.84-3.068-.198-.315a8.307 8.307 0 0 1-1.272-4.425c0-4.582 3.728-8.31 8.31-8.31 2.22 0 4.308.865 5.877 2.436a8.272 8.272 0 0 1 2.43 5.876c0 4.583-3.728 8.312-8.304 8.312zm4.555-6.223c-.25-.125-1.477-.728-1.706-.812-.229-.083-.396-.125-.562.125-.166.25-.646.812-.792.979-.145.166-.291.187-.541.062a6.837 6.837 0 0 1-2.008-1.238 7.55 7.55 0 0 1-1.39-1.733c-.146-.25-.015-.385.109-.509.112-.112.25-.292.375-.438.125-.145.167-.25.25-.416.083-.166.042-.312-.021-.437-.062-.125-.562-1.354-.77-1.854-.203-.487-.41-.421-.562-.429-.146-.007-.312-.008-.479-.008s-.438.062-.667.312c-.229.25-.875.854-.875 2.083s.896 2.417 1.021 2.583c.125.167 1.763 2.693 4.27 3.776.596.257 1.062.41 1.425.526.598.19 1.143.163 1.573.099.479-.071 1.477-.604 1.686-1.187.208-.583.208-1.083.146-1.187-.063-.105-.229-.167-.479-.292z"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">WhatsApp</div>
+              <div class="contact-val">+91 9566633163</div>
+            </div>
+          </div>
+          <span class="action-badge">Chat →</span>
+        </a>
+
+        <!-- Email -->
+        <a href="mailto:nandhakrish410@gmail.com" class="contact-item-btn">
+          <div class="contact-item-left">
+            <div class="contact-icon-box email-box">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-10 7L2 7"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-val">nandhakrish410@gmail.com</div>
+            </div>
+          </div>
+          <span class="action-badge">Email →</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const FRAME_COUNT = 190;
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
+
+      const images = [];
+      let lastRenderedFrame = -1;
+      let isRendering = false;
+
+      // Smooth scroll lerp variables
+      let targetScrollY = 0;
+      let currentScrollY = 0;
+      const LERP_FACTOR = 0.12; // Faster lerp for less lag
+
+      function getFrameUrl(index) {
+        return `ezgif-frame-${String(index).padStart(3, '0')}.jpg`;
+      }
+
+      // Optimized draw with lower quality for better performance
+      function drawImageCover(img) {
+        if (!img || !img.complete || img.naturalWidth === 0 || isRendering) return;
+        isRendering = true;
+
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const iw = img.naturalWidth;
+        const ih = img.naturalHeight;
+
+        const ratio = Math.max(cw / iw, ch / ih);
+        const nw = iw * ratio;
+        const nh = ih * ratio;
+        const cx = (cw - nw) * 0.5;
+        const cy = (ch - nh) * 0.5;
+
+        ctx.drawImage(img, 0, 0, iw, ih, cx, cy, nw, nh);
+        isRendering = false;
+      }
+
+      // Find nearest preloaded frame
+      function getBestAvailableFrame(desiredIndex) {
+        if (images[desiredIndex - 1] && images[desiredIndex - 1].complete && images[desiredIndex - 1].naturalWidth > 0) {
+          return images[desiredIndex - 1];
+        }
+        for (let offset = 1; offset < FRAME_COUNT; offset++) {
+          const prev = desiredIndex - 1 - offset;
+          if (prev >= 0 && images[prev] && images[prev].complete && images[prev].naturalWidth > 0) {
+            return images[prev];
+          }
+          const next = desiredIndex - 1 + offset;
+          if (next < FRAME_COUNT && images[next] && images[next].complete && images[next].naturalWidth > 0) {
+            return images[next];
+          }
+        }
+        return null;
+      }
+
+      function renderFrame(frameIndex, force = false) {
+        if (!force && frameIndex === lastRenderedFrame) return;
+
+        const img = getBestAvailableFrame(frameIndex);
+        if (img) {
+          drawImageCover(img);
+          lastRenderedFrame = frameIndex;
+        }
+      }
+
+      // Reduced resolution for better performance
+      function handleResize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // Cap at 1.5x instead of 2x
+        canvas.width = Math.round(window.innerWidth * dpr);
+        canvas.height = Math.round(window.innerHeight * dpr);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'medium'; // Use medium instead of high
+
+        if (lastRenderedFrame !== -1) {
+          renderFrame(lastRenderedFrame, true);
+        }
+      }
+
+      // Progressive loading - load visible frames first
+      function preloadImages() {
+        const priorityFrames = [1, 30, 60, 90, 120, 150, 180, 190];
+
+        // Load priority frames first
+        priorityFrames.forEach(i => {
+          const img = new Image();
+          img.src = getFrameUrl(i);
+          img.onload = () => {
+            if (i === 1 && lastRenderedFrame === -1) {
+              renderFrame(1, true);
+            }
+          };
+          images[i - 1] = img;
+        });
+
+        // Load remaining frames in background
+        setTimeout(() => {
+          for (let i = 1; i <= FRAME_COUNT; i++) {
+            if (!images[i - 1]) {
+              const img = new Image();
+              img.src = getFrameUrl(i);
+              images[i - 1] = img;
+            }
+          }
+        }, 100);
+      }
+
+      let scrollTimeout;
+      window.addEventListener('scroll', () => {
+        targetScrollY = window.scrollY;
+        clearTimeout(scrollTimeout);
+      }, { passive: true });
+
+      window.addEventListener('resize', handleResize);
+
+      // Throttled animation loop
+      let lastFrameTime = 0;
+      const frameDelay = 16; // ~60fps max
+
+      function tick(timestamp) {
+        if (timestamp - lastFrameTime < frameDelay) {
+          requestAnimationFrame(tick);
+          return;
+        }
+        lastFrameTime = timestamp;
+
+        const diff = targetScrollY - currentScrollY;
+        if (Math.abs(diff) > 0.5) {
+          currentScrollY += diff * LERP_FACTOR;
+        } else {
+          currentScrollY = targetScrollY;
+        }
+
+        const footer = document.getElementById('contact');
+        const footerTop = footer ? footer.offsetTop : document.documentElement.scrollHeight;
+        const maxScroll = Math.max(1, footerTop - window.innerHeight);
+        const progress = Math.max(0, Math.min(1, currentScrollY / maxScroll));
+        const targetFrame = Math.min(FRAME_COUNT, Math.max(1, Math.round(progress * (FRAME_COUNT - 1)) + 1));
+
+        renderFrame(targetFrame);
+
+        requestAnimationFrame(tick);
+      }
+
+      handleResize();
+      preloadImages();
+      requestAnimationFrame(tick);
+
+      // Lock scroll to end exactly at footer bottom — no empty space below
+      function lockScrollAtFooter() {
+        const footer = document.getElementById('contact');
+        const scrollContainer = document.querySelector('.scroll-container');
+        if (footer && scrollContainer) {
+          const footerBottom = footer.offsetTop + footer.offsetHeight;
+          scrollContainer.style.minHeight = footerBottom + 'px';
+          scrollContainer.style.height = footerBottom + 'px';
+        }
+      }
+      lockScrollAtFooter();
+      window.addEventListener('resize', lockScrollAtFooter);
+
+      // Contact Modal Interactivity
+      const modal = document.getElementById('contactModal');
+      const closeBtn = document.getElementById('closeModalBtn');
+      const getInTouchBtns = document.querySelectorAll('a[href="#contact"], .btn-orange');
+
+      getInTouchBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          modal.classList.add('active');
+        });
+      });
+
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+
+      // Logo & Home Button click to scroll to top
+      document.querySelectorAll('.logo, nav a[href="#home"]').forEach(elem => {
+        elem.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // Smooth Scroll for Nav Links
+      document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const targetId = this.getAttribute('href');
+          if (targetId === '#home') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+          }
+          if (targetId && targetId !== '#' && targetId !== '#contact') {
+            const targetElem = document.querySelector(targetId);
+            if (targetElem) {
+              e.preventDefault();
+              targetElem.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
